@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pizzería La Mejor</title>
+
+  <!-- CSS externo -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="container">
+  <header>
+    <div class="brand">
+      <div class="logo">🍕</div>
+      <div>
+        <h1>Pizzería La Mejor</h1>
+        <p class="lead">Pizzas artesanales • Buñuelos recién hechos</p>
+      </div>
+    </div>
+
+    <div class="segmented" id="category-seg">
+      <button data-cat="todas" class="active">Todas</button>
+      <button data-cat="pizzas">Pizzas</button>
+      <button data-cat="bunuelos">Buñuelos</button>
+    </div>
+  </header>
+
+  <!-- MENÚ -->
+  <section class="menu">
+    <h2>Nuestro menú</h2>
+    <div class="menu-grid" id="menu-grid"></div>
+  </section>
+
+  <!-- CARRITO -->
+  <aside class="sidebar">
+    <div class="cart-title">
+      <strong>Tu pedido</strong>
+      <span id="cart-count">0</span>
+    </div>
+
+    <div class="cart-list" id="cart-list">
+      <div class="empty" id="cart-empty">Carrito vacío 🍕</div>
+    </div>
+
+    <div class="total">
+      <span>Total</span>
+      <span id="cart-total">$0</span>
+    </div>
+
+    <button class="checkout pay" id="checkout-btn">Pagar ahora</button>
+    <button class="checkout" id="clear-btn">Vaciar carrito</button>
+  </aside>
+
+  <footer>
+    Atención de 11:00 a.m. a 10:00 p.m.
+  </footer>
+</main>
+
+<script>
+/* =============================
+   CONFIGURACIÓN WHATSAPP
+============================= */
+const WHATSAPP_NUMBER = "573217073701"; // 57 + número sin guiones
+
+/* =============================
+   MENÚ
+============================= */
+const MENU = [
+  { id:'p1', nombre:'Pizza Margarita', categoria:'pizzas', precio:10000 },
+  { id:'p2', nombre:'Pizza Pepperoni', categoria:'pizzas', precio:30000 },
+  { id:'p3', nombre:'Pizza 4 Quesos', categoria:'pizzas', precio:20000 },
+  { id:'b1', nombre:'Buñuelo de Queso', categoria:'bunuelos', precio:1800 },
+  { id:'b2', nombre:'Buñuelo de Carne', categoria:'bunuelos', precio:15000 }
+];
+
+const state = { items:{} };
+
+const menuGrid = document.getElementById('menu-grid');
+const cartList = document.getElementById('cart-list');
+const cartTotal = document.getElementById('cart-total');
+const cartCount = document.getElementById('cart-count');
+const cartEmpty = document.getElementById('cart-empty');
+
+const money = n => '$' + n.toLocaleString();
+
+/* =============================
+   RENDER MENÚ
+============================= */
+function renderMenu(cat='todas'){
+  menuGrid.innerHTML='';
+  MENU
+    .filter(m=>cat==='todas'||m.categoria===cat)
+    .forEach(item=>{
+      menuGrid.innerHTML += `
+        <article class="card">
+          <div class="thumb">${item.categoria==='pizzas'?'🍕':'🧆'}</div>
+          <div class="info">
+            <h3>${item.nombre}</h3>
+            <div class="price-row">
+              <span class="price">${money(item.precio)}</span>
+              <button class="btn primary" onclick="addItem('${item.id}')">Agregar</button>
+            </div>
+          </div>
+        </article>
+      `;
+    });
+}
+
+/* =============================
+   CARRITO
+============================= */
+function addItem(id){
+  const item = MENU.find(m=>m.id===id);
+  if(!state.items[id]) state.items[id]={item,qty:0};
+  state.items[id].qty++;
+  updateCart();
+}
+
+function updateCart(){
+  cartList.innerHTML='';
+  const items = Object.values(state.items);
+
+  if(items.length===0){
+    cartList.appendChild(cartEmpty);
+    cartTotal.textContent = money(0);
+    cartCount.textContent = 0;
+    return;
+  }
+
+  let total=0,count=0;
+  items.forEach(i=>{
+    total += i.qty * i.item.precio;
+    count += i.qty;
+    cartList.innerHTML += `
+      <div class="cart-item">
+        <span>${i.qty}x</span>
+        <span>${i.item.nombre}</span>
+        <strong>${money(i.qty*i.item.precio)}</strong>
+      </div>
+    `;
+  });
+
+  cartTotal.textContent = money(total);
+  cartCount.textContent = count;
+}
+
+/* =============================
+   WHATSAPP PAGO
+============================= */
+document.getElementById('checkout-btn').onclick = () => {
+  const items = Object.values(state.items);
+  if(items.length===0){
+    alert("El carrito está vacío");
+    return;
+  }
+
+  let mensaje = "Hola 👋 quiero hacer el siguiente pedido:%0A%0A";
+  let total = 0;
+
+  items.forEach(i=>{
+    mensaje += `• ${i.qty} x ${i.item.nombre} = ${money(i.qty*i.item.precio)}%0A`;
+    total += i.qty * i.item.precio;
+  });
+
+  mensaje += `%0A*Total: ${money(total)}*`;
+
+  alert("TE DIRIJO A WHATSHAPP PARA AGENDAR EL PEDIDO 📲");
+
+  window.open(
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`,
+    "_blank"
+  );
+};
+
+document.getElementById('clear-btn').onclick=()=>{
+  state.items = {};
+  updateCart();
+};
+
+/* =============================
+   FILTRO
+============================= */
+document.getElementById('category-seg').onclick = e => {
+  if(e.target.tagName!=="BUTTON")return;
+  document.querySelectorAll('.segmented button')
+    .forEach(b=>b.classList.remove('active'));
+  e.target.classList.add('active');
+  renderMenu(e.target.dataset.cat);
+};
+
+renderMenu();
+updateCart();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+/* =============================
+   ESTILO GENERAL – PIZZERÍA
+============================= */
+
+:root{
+  --rojo:#c81e1e;
+  --naranja:#f97316;
+  --amarillo:#facc15;
+  --oscuro:#1a0f0a;
+  --blanco:#fff7ed;
+  --gris:#7c5c45;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+  background:
+    radial-gradient(circle at top, #ffedd5 0%, transparent 60%),
+    linear-gradient(180deg, #fff7ed, #fed7aa);
+  color:var(--oscuro);
+  padding:24px;
+}
+
+/* =============================
+   CONTENEDOR PRINCIPAL
+============================= */
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  display:grid;
+  grid-template-columns: 1fr 360px;
+  gap:24px;
+}
+
+@media (max-width:900px){
+  .container{
+    grid-template-columns:1fr;
+  }
+}
+
+/* =============================
+   HEADER
+============================= */
+
+header{
+  grid-column:1/-1;
+  background:linear-gradient(90deg,var(--rojo),var(--naranja));
+  color:white;
+  padding:20px;
+  border-radius:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.logo{
+  background:var(--amarillo);
+  color:#3b1900;
+  font-weight:900;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  box-shadow: inset 0 0 0 4px white;
+}
+
+header h1{
+  font-size:22px;
+}
+
+.lead{
+  font-size:14px;
+  opacity:.9;
+}
+
+/* =============================
+   BOTONES CATEGORÍA
+============================= */
+
+.segmented{
+  background:rgba(255,255,255,.15);
+  padding:6px;
+  border-radius:40px;
+  display:flex;
+  gap:6px;
+}
+
+.segmented button{
+  border:none;
+  background:transparent;
+  color:white;
+  font-weight:700;
+  padding:8px 14px;
+  border-radius:30px;
+  cursor:pointer;
+}
+
+.segmented button.active{
+  background:white;
+  color:var(--rojo);
+}
+
+/* =============================
+   MENÚ
+============================= */
+
+.menu{
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.menu h2{
+  margin-bottom:14px;
+  color:var(--rojo);
+}
+
+/* =============================
+   TARJETAS DE PIZZA / BUÑUELO
+============================= */
+
+.menu-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:16px;
+}
+
+.card{
+  background:linear-gradient(180deg,#fff7ed,#ffedd5);
+  border-radius:18px;
+  padding:14px;
+  display:flex;
+  gap:12px;
+  transition:.25s;
+  border:2px solid transparent;
+}
+
+.card:hover{
+  transform:translateY(-6px) scale(1.02);
+  border-color:var(--naranja);
+}
+
+.thumb{
+  width:80px;
+  height:80px;
+  border-radius:16px;
+  background:
+    radial-gradient(circle at top, var(--amarillo), var(--naranja));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.info h3{
+  font-size:16px;
+  color:#3b1900;
+}
+
+.desc{
+  font-size:13px;
+  color:var(--gris);
+  margin:6px 0;
+}
+
+.price{
+  font-weight:900;
+  color:var(--rojo);
+  font-size:17px;
+}
+
+/* =============================
+   BOTONES
+============================= */
+
+.actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+
+.btn{
+  border:2px solid var(--naranja);
+  background:white;
+  color:var(--naranja);
+  font-weight:800;
+  padding:6px 10px;
+  border-radius:12px;
+  cursor:pointer;
+}
+
+.btn:hover{
+  background:var(--naranja);
+  color:white;
+}
+
+.btn.primary{
+  background:var(--rojo);
+  color:white;
+  border:none;
+}
+
+.btn.primary:hover{
+  background:#a81616;
+}
+
+/* =============================
+   CARRITO
+============================= */
+
+.sidebar{
+  background:white;
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  position:sticky;
+  top:20px;
+}
+
+.cart-title{
+  font-size:18px;
+  color:var(--rojo);
+  display:flex;
+  justify-content:space-between;
+  font-weight:900;
+}
+
+.cart-list{
+  margin-top:12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  max-height:350px;
+  overflow:auto;
+}
+
+.cart-item{
+  background:#fff7ed;
+  border-radius:14px;
+  padding:10px;
+  display:flex;
+  gap:10px;
+}
+
+.cart-item .meta{
+  flex:1;
+}
+
+.qty{
+  display:flex;
+  gap:4px;
+  background:white;
+  border-radius:10px;
+  border:2px solid var(--amarillo);
+}
+
+.qty button{
+  border:none;
+  background:none;
+  font-weight:900;
+  cursor:pointer;
+  padding:4px 8px;
+  color:var(--rojo);
+}
+
+.total{
+  margin-top:14px;
+  font-size:20px;
+  font-weight:900;
+  color:#3b1900;
+  display:flex;
+  justify-content:space-between;
+}
+
+.checkout{
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  font-size:16px;
+  font-weight:900;
+  border-radius:14px;
+  cursor:pointer;
+  border:none;
+}
+
+.checkout.pay{
+  background:linear-gradient(90deg,var(--rojo),var(--naranja));
+  color:white;
+}
+
+.checkout.pay:hover{
+  opacity:.9;
+}
+
+.empty{
+  text-align:center;
+  color:var(--gris);
+  padding:20px;
+}
+
+/* =============================
+   FOOTER
+============================= */
+
+footer{
+  grid-column:1/-1;
+  text-align:center;
+  margin-top:16px;
+  color:var(--gris);
+  font-size:14px;
+}
